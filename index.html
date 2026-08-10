@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="600">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>">
+</head>
+<body>
+<title>Ohio Keno — live frequency</title>
+<style>
+.vz{color-scheme:light;--sf:#fcfcfb;--tp:#0b0b0b;--ts:#52514e;--tm:#77756f;--bd:#dedcd6;--bn:#eef3fa;
+--up:#0f7a4f;--dn:#c2372d;--tick:#0b1418;--tickink:#7de3b0;--acc:#2a78d6;
+font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;background:var(--sf);color:var(--tp);
+padding:0 0 42px;margin:0}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .vz{color-scheme:dark;
+--sf:#1a1a19;--tp:#fff;--ts:#c3c2b7;--tm:#96948a;--bd:#3a3a36;--bn:#20262e;
+--up:#3fbb82;--dn:#e2685c;--tick:#080f12;--acc:#3987e5}}
+:root[data-theme="dark"] .vz{color-scheme:dark;--sf:#1a1a19;--tp:#fff;--ts:#c3c2b7;--tm:#96948a;
+--bd:#3a3a36;--bn:#20262e;--up:#3fbb82;--dn:#e2685c;--tick:#080f12;--acc:#3987e5}
+.inner{max-width:1000px;margin:0 auto;padding:0 20px}
+.tape{background:var(--tick);overflow:hidden;border-bottom:1px solid var(--bd)}
+.tapeRow{display:flex;gap:26px;padding:9px 0;width:max-content;animation:roll 100s linear infinite}
+@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tk{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
+font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--tickink)}
+.tk b{color:#5f7d8a;font-weight:500;margin-right:3px} .tk i{font-style:normal;opacity:.88}
+.hdr{padding:22px 0 4px} h1{font-size:21px;margin:0 0 3px;letter-spacing:-.01em}
+.sub{color:var(--ts);font-size:13px;line-height:1.55;margin:0}
+.live{display:inline-flex;align-items:center;gap:6px;font-family:ui-monospace,Menlo,monospace;
+font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--up)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--up);animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.tapeRow,.dot{animation:none}}
+/* ---- filter bar ---- */
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 12px;
+padding:11px 13px;border:1px solid var(--bd);border-radius:8px;background:var(--bn)}
+.bar .lb{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.09em;
+text-transform:uppercase;color:var(--tm);margin-right:2px}
+.chip{font:inherit;font-size:12px;padding:5px 11px;border-radius:999px;cursor:pointer;
+border:1px solid var(--bd);background:var(--sf);color:var(--ts)}
+.chip:hover{border-color:var(--acc);color:var(--tp)}
+.chip[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.chip:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.bar select{font:inherit;font-size:12px;padding:5px 7px;border-radius:6px;
+border:1px solid var(--bd);background:var(--sf);color:var(--tp)}
+.rng{margin-left:auto;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--tm)}
+/* ---- quotes ---- */
+.quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:1px;
+background:var(--bd);border:1px solid var(--bd);border-radius:7px;overflow:hidden;margin:0 0 14px}
+.q{background:var(--sf);padding:12px 14px}
+.q .k{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.1em;
+text-transform:uppercase;color:var(--tm);margin:0 0 5px}
+.q .v{font-size:22px;font-variant-numeric:tabular-nums;line-height:1;margin:0}
+.q .d{font-size:11.5px;color:var(--tm);margin-top:4px;font-variant-numeric:tabular-nums}
+/* ---- recent draws ---- */
+.recent{border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin:0 0 8px}
+.rw{display:flex;align-items:center;gap:9px;padding:8px 13px;border-bottom:1px solid var(--bd);
+flex-wrap:wrap}
+.rw:last-child{border-bottom:0} .rw:nth-child(odd){background:var(--bn)}
+.rw .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--tm);min-width:74px}
+.ball{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;
+padding:0 5px;border-radius:5px;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;
+background:var(--bn);border:1px solid var(--bd);font-variant-numeric:tabular-nums}
+.ball.hot{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+h2{font-size:15px;margin:24px 0 6px}
+.cap{color:var(--ts);font-size:12.5px;line-height:1.55;margin:0 0 10px}
+.wrap{overflow-x:auto;border:1px solid var(--bd);border-radius:8px;padding:10px;background:var(--sf)}
+svg.ch{width:100%;min-width:640px;display:block;overflow:visible}
+.hd{fill:var(--ts);font-size:12px;font-weight:600} .gl{stroke:var(--bd);stroke-width:1;stroke-dasharray:3 3}
+.zero{stroke:var(--tm);stroke-width:1.5} .ax{fill:var(--tm);font-size:10px}
+.bn2{font-size:14px;font-weight:700} .bv{font-size:11px;opacity:.9}
+.bar2:hover,.cellg:hover{opacity:.72}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border-bottom:1px solid var(--bd);padding:4px 8px;text-align:right;font-variant-numeric:tabular-nums}
+th{color:var(--ts);position:sticky;top:0;background:var(--sf);font-weight:600;
+font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase}
+td:nth-child(2){text-align:left} td.up{color:var(--up)} td.dn{color:var(--dn)}
+.tw{max-height:400px;overflow-y:auto;border:1px solid var(--bd);border-radius:8px;padding:0 10px}
+.note{background:var(--bn);border-left:3px solid var(--acc);padding:12px 16px;border-radius:0 6px 6px 0;
+font-size:12.5px;color:var(--ts);line-height:1.65;margin-top:18px}
+#tt{position:fixed;pointer-events:none;background:var(--tp);color:var(--sf);
+font-family:ui-monospace,Menlo,monospace;font-size:11.5px;padding:5px 9px;border-radius:5px;
+opacity:0;transition:opacity .1s;z-index:99;white-space:nowrap}
+</style>
+<div class="vz">
+<div class="tape"><div class="tapeRow" id="tape"></div></div>
+<div class="inner">
+  <div class="hdr">
+    <span class="live"><span class="dot"></span>updating · refreshed Aug 9, 8:30 PM</span>
+    <h1>Ohio Keno — frequency by date</h1>
+    <p class="sub" id="sub"></p>
+  </div>
+
+  <div class="bar" role="group" aria-label="Date range">
+    <span class="lb">Range</span>
+    <button class="chip" data-p="1">Today</button>
+    <button class="chip" data-p="7">7 days</button>
+    <button class="chip" data-p="14">14 days</button>
+    <button class="chip" data-p="30">30 days</button>
+    <button class="chip" data-p="0" aria-pressed="true">All</button>
+    <span class="lb" style="margin-left:6px">From</span><select id="from"></select>
+    <span class="lb">To</span><select id="to"></select>
+    <span class="rng" id="rng"></span>
+  </div>
+
+  <div class="quotes" id="quotes"></div>
+
+  <h2>Five most recent draws</h2>
+  <p class="cap">Newest first. Numbers running above expectation <em>within the selected range</em> are highlighted.</p>
+  <div class="recent" id="recent"></div>
+
+  <h2>Deviation</h2>
+  <p class="cap">One bar per number. Above the line = drawn more than expected for this range, below = less.</p>
+  <div class="wrap"><svg viewBox="0 0 940 420" class="ch" id="c1"></svg></div>
+
+  <h2>The board</h2>
+  <div class="wrap"><svg viewBox="0 0 894 564" class="ch" id="c3"></svg></div>
+
+  <h2>Full ranking</h2>
+  <div class="tw"><table>
+    <thead><tr><th>rank</th><th>num</th><th>count</th><th>vs exp</th><th>&sigma;</th></tr></thead>
+    <tbody id="tbody"></tbody></table></div>
+
+  <p class="note" id="note"></p>
+</div></div>
+<div id="tt"></div>
+<script>
+const DAY=[{"d":"2026-07-11","n":351,"a":2069050,"b":2069400,"c":[69,88,90,89,85,94,94,93,76,87,85,88,94,86,89,94,82,96,87,87,85,85,89,80,77,90,91,87,93,86,78,92,101,85,78,96,99,95,89,75,100,99,84,88,87,82,86,84,76,85,84,82,92,111,84,90,86,78,97,83,78,74,91,96,95,80,93,86,96,75,85,93,110,70,70,89,93,92,92,100]},{"d":"2026-07-12","n":351,"a":2069401,"b":2069751,"c":[87,87,85,83,93,82,90,86,85,86,84,88,100,88,86,95,96,97,72,88,86,91,80,89,74,95,87,91,84,104,85,87,90,97,88,73,93,88,97,93,83,83,103,84,89,92,93,82,77,95,93,84,85,75,92,88,84,83,82,83,83,74,98,81,87,83,85,94,104,100,101,99,73,90,86,79,86,79,88,90]},{"d":"2026-07-13","n":351,"a":2069752,"b":2070102,"c":[92,69,93,89,91,91,82,96,89,95,88,94,88,98,97,85,81,93,84,91,107,77,93,83,93,83,85,97,82,84,89,92,95,102,96,81,93,75,90,91,87,89,94,92,90,89,79,79,76,88,99,83,77,81,78,87,76,94,76,93,79,82,92,89,87,100,94,83,85,83,97,84,84,84,82,83,79,96,75,101]},{"d":"2026-07-14","n":351,"a":2070103,"b":2070453,"c":[96,84,91,94,89,92,88,75,99,95,78,90,89,99,92,81,97,99,88,100,77,97,87,90,78,89,89,88,86,90,82,81,80,92,96,100,86,89,83,68,83,82,89,71,94,89,99,81,93,86,83,84,79,91,93,93,86,85,83,90,92,88,71,87,102,82,89,71,80,94,90,73,86,90,86,86,101,94,99,81]},{"d":"2026-07-15","n":351,"a":2070454,"b":2070804,"c":[74,91,100,113,89,81,76,85,95,77,89,93,105,77,93,84,89,81,74,102,85,102,95,75,87,96,88,89,84,89,72,87,78,89,86,87,99,88,91,75,93,97,77,81,89,71,106,101,89,84,93,91,88,101,89,78,88,86,96,79,87,83,96,94,90,79,78,92,92,89,94,83,90,80,83,89,72,97,87,78]},{"d":"2026-07-16","n":351,"a":2070805,"b":2071155,"c":[81,96,84,94,90,79,83,91,95,90,90,94,81,84,102,106,88,97,88,84,100,91,95,80,86,87,82,94,79,95,96,87,99,89,78,88,89,87,74,85,104,91,93,91,87,85,80,94,85,90,81,88,73,77,94,86,105,90,95,73,86,84,76,84,80,69,83,71,91,94,95,88,94,86,108,87,80,82,87,75]},{"d":"2026-07-17","n":351,"a":2071156,"b":2071506,"c":[84,85,92,84,91,75,92,73,78,80,97,76,92,106,94,96,81,96,89,94,101,93,94,94,84,84,97,97,91,87,85,87,83,80,81,103,86,88,100,91,79,80,85,97,85,93,81,79,106,84,99,74,95,82,73,92,80,84,80,92,89,79,94,101,77,76,81,94,95,76,90,97,86,77,97,86,89,78,91,86]},{"d":"2026-07-18","n":351,"a":2071507,"b":2071857,"c":[81,79,85,92,84,85,83,90,106,80,75,88,96,83,99,85,85,96,80,80,90,82,88,77,83,94,75,113,80,89,86,92,89,86,88,106,88,97,91,82,86,85,89,87,76,71,92,87,85,90,88,97,92,80,92,96,79,103,84,90,88,88,79,89,84,77,99,83,85,91,88,98,74,97,81,87,92,83,97,103]},{"d":"2026-07-19","n":351,"a":2071858,"b":2072208,"c":[78,96,88,90,96,81,97,84,93,87,86,86,92,78,81,86,76,87,74,84,94,89,101,78,65,77,99,96,95,82,97,88,83,97,85,90,96,77,83,87,72,102,90,84,95,88,95,88,88,83,78,83,95,90,95,93,80,89,83,95,85,78,86,100,96,84,84,97,82,89,82,89,84,82,88,91,100,97,95,86]},{"d":"2026-07-20","n":351,"a":2072209,"b":2072559,"c":[89,85,78,89,88,71,85,84,90,91,82,94,91,88,95,72,81,87,79,93,76,93,78,90,81,84,78,89,81,97,92,91,77,86,88,89,78,98,87,93,76,90,84,87,88,85,91,84,89,88,98,93,76,81,87,96,104,98,87,83,92,78,95,84,84,93,97,89,111,91,86,91,99,89,86,94,97,93,84,84]},{"d":"2026-07-21","n":351,"a":2072560,"b":2072910,"c":[79,90,92,75,93,86,83,80,90,94,86,79,105,88,84,106,89,92,98,101,99,77,86,95,91,91,84,93,87,81,69,81,84,87,88,70,87,81,90,91,97,82,82,77,82,81,98,93,81,78,93,97,85,85,94,89,107,85,81,90,88,95,89,88,97,84,88,75,108,90,82,87,78,80,86,74,83,90,105,94]},{"d":"2026-07-22","n":351,"a":2072911,"b":2073261,"c":[80,108,84,90,67,98,89,88,98,82,86,83,89,80,86,94,103,95,88,84,88,82,82,80,79,86,88,79,88,72,79,79,89,90,82,85,90,79,88,113,82,97,96,73,86,93,94,84,98,83,85,90,88,81,87,95,82,78,88,84,80,89,94,91,89,86,89,79,96,91,100,103,94,88,95,90,87,86,91,88]},{"d":"2026-07-23","n":351,"a":2073262,"b":2073612,"c":[89,76,92,79,74,80,80,92,77,77,86,95,87,87,72,96,85,98,91,96,91,97,99,99,82,84,79,99,91,81,83,88,83,88,91,84,85,86,90,78,88,88,76,88,98,85,79,90,83,78,103,91,101,81,83,103,84,92,89,64,91,93,101,97,99,83,77,90,89,81,86,86,93,95,93,91,87,88,95,94]},{"d":"2026-07-24","n":351,"a":2073613,"b":2073963,"c":[95,78,87,99,88,91,99,87,87,81,91,97,87,83,88,98,91,88,78,73,95,86,83,81,97,90,77,78,92,100,96,81,94,93,83,94,88,91,79,92,87,83,95,82,82,74,85,105,86,97,71,80,86,74,90,78,98,87,94,95,82,89,91,84,84,76,92,86,91,92,77,93,100,83,94,89,85,100,86,81]},{"d":"2026-07-25","n":351,"a":2073964,"b":2074314,"c":[104,91,92,88,84,96,86,84,73,84,87,74,70,83,105,75,101,94,96,80,88,81,89,79,97,83,105,81,99,76,96,95,88,84,84,77,94,91,86,83,86,92,94,96,74,81,67,95,98,100,85,86,81,88,81,91,89,93,82,94,94,80,89,91,80,89,77,86,102,76,83,90,87,96,87,97,93,89,85,93]},{"d":"2026-07-26","n":351,"a":2074315,"b":2074665,"c":[94,95,99,93,95,97,83,88,81,85,79,87,90,86,99,97,68,82,100,79,102,88,74,80,83,87,106,81,103,64,93,92,98,93,91,92,72,89,69,84,72,87,91,87,94,86,77,83,101,92,88,97,83,74,87,90,85,90,87,91,86,92,93,91,97,94,79,84,83,93,95,88,87,88,95,83,84,80,83,85]},{"d":"2026-07-27","n":351,"a":2074666,"b":2075016,"c":[90,79,80,92,88,94,72,82,85,74,96,94,81,88,84,83,79,90,86,83,78,91,79,85,90,88,92,86,85,91,86,80,104,87,101,82,90,97,84,90,81,92,94,97,89,93,83,92,81,76,72,81,81,98,87,106,77,95,98,87,86,94,98,93,81,94,89,80,94,94,87,86,99,94,97,78,105,80,84,81]},{"d":"2026-07-28","n":351,"a":2075017,"b":2075367,"c":[87,86,94,96,83,86,89,88,93,81,92,73,100,84,97,95,89,100,89,85,72,95,96,94,87,81,83,82,82,82,99,92,83,82,83,80,88,64,96,88,86,87,78,94,105,87,92,81,99,88,80,90,93,92,101,85,80,82,98,109,84,101,88,78,86,77,81,83,80,79,78,88,97,82,96,79,83,106,80,91]},{"d":"2026-07-29","n":351,"a":2075368,"b":2075718,"c":[76,87,97,80,101,85,90,96,96,83,93,79,78,83,79,82,75,80,87,91,96,91,81,89,91,81,81,85,92,93,77,101,98,97,94,96,77,92,68,80,101,82,110,101,82,91,84,85,89,85,82,83,78,86,98,95,79,95,81,92,82,87,89,90,96,83,81,98,86,92,88,106,82,83,80,96,78,110,85,71]},{"d":"2026-07-30","n":351,"a":2075719,"b":2076069,"c":[99,69,88,92,96,87,81,74,85,89,91,82,78,81,86,91,83,86,87,92,87,90,78,83,85,85,84,87,93,101,85,87,82,82,86,99,84,100,90,79,83,82,94,113,87,84,92,82,90,79,79,91,85,95,94,102,89,101,82,90,77,84,89,101,92,85,85,99,83,87,101,89,84,84,77,99,91,72,99,84]},{"d":"2026-07-31","n":351,"a":2076070,"b":2076420,"c":[102,99,101,93,101,86,71,86,85,99,81,83,92,94,95,86,93,86,97,75,83,86,78,83,85,84,94,92,86,70,79,92,83,86,85,90,89,80,82,82,82,83,84,67,87,79,95,93,81,94,80,77,87,90,103,80,85,90,100,98,105,102,72,89,86,82,94,92,82,106,87,94,84,100,92,87,79,88,91,79]},{"d":"2026-08-01","n":351,"a":2076421,"b":2076771,"c":[97,91,83,90,84,86,84,75,100,88,78,94,89,93,80,91,84,86,77,85,92,92,89,98,97,83,89,78,82,76,79,88,92,105,98,85,97,88,89,78,79,78,102,95,82,99,94,84,83,81,100,91,94,89,84,105,79,104,86,101,90,77,95,78,94,84,74,90,82,86,76,88,88,82,95,90,83,76,85,87]},{"d":"2026-08-02","n":351,"a":2076772,"b":2077122,"c":[111,80,75,78,102,89,87,80,88,91,81,82,89,77,82,90,74,78,92,78,94,91,98,70,88,91,89,87,90,84,72,100,90,85,96,99,80,86,83,93,87,91,91,95,79,87,83,79,82,84,83,88,86,73,75,96,86,81,103,92,94,84,110,83,85,87,84,91,78,101,91,107,88,83,104,85,88,101,106,79]},{"d":"2026-08-03","n":351,"a":2077123,"b":2077473,"c":[80,80,89,103,66,79,87,96,96,83,88,80,97,86,92,83,95,89,87,93,84,90,98,69,88,90,91,96,100,89,88,88,90,88,61,79,107,94,94,86,81,94,80,75,90,81,76,79,73,94,82,73,91,85,81,81,87,95,104,91,91,79,87,87,86,107,75,100,96,85,98,70,91,96,86,80,100,86,106,102]},{"d":"2026-08-04","n":351,"a":2077474,"b":2077824,"c":[97,81,80,76,85,94,91,78,85,92,88,84,107,81,80,86,83,99,98,85,81,83,86,94,89,88,82,84,79,89,81,86,80,84,91,95,94,83,96,97,87,95,101,91,78,78,95,94,98,90,90,84,73,87,94,98,78,88,101,74,90,91,92,90,74,100,94,100,84,71,86,93,82,91,85,80,81,87,85,98]},{"d":"2026-08-05","n":351,"a":2077825,"b":2078175,"c":[82,84,89,86,110,96,87,84,87,77,75,88,93,78,97,83,86,72,74,81,84,101,82,103,85,99,82,93,93,98,71,85,74,94,90,80,68,88,79,89,99,93,84,82,81,89,95,95,88,84,79,80,87,88,89,79,86,99,88,73,97,104,98,82,79,90,103,94,87,97,73,93,86,85,84,96,94,100,98,95]},{"d":"2026-08-06","n":351,"a":2078176,"b":2078526,"c":[85,82,104,82,72,95,84,94,87,94,96,89,82,68,93,92,96,96,84,80,84,77,76,82,75,85,93,83,79,79,96,89,96,82,91,102,85,77,81,93,100,87,92,90,89,85,85,78,94,104,93,82,83,94,73,92,78,88,90,93,86,85,82,88,100,89,77,86,83,98,85,98,88,94,87,91,89,100,90,94]},{"d":"2026-08-07","n":351,"a":2078527,"b":2078877,"c":[94,90,83,93,82,92,90,98,97,85,83,93,86,71,86,96,83,86,97,90,94,105,70,97,109,88,78,81,85,91,90,78,80,86,79,80,81,89,99,98,84,81,83,76,101,100,79,89,90,77,83,81,80,88,92,86,79,86,93,86,101,84,84,86,97,95,95,98,87,87,86,82,78,79,85,95,72,96,86,100]},{"d":"2026-08-08","n":351,"a":2078878,"b":2079228,"c":[94,90,84,94,87,82,100,87,87,91,77,86,92,82,94,99,70,87,90,77,96,100,86,94,87,90,78,81,90,90,92,84,71,89,78,85,92,82,93,92,98,93,78,73,84,107,95,90,95,96,89,92,89,87,93,84,84,78,87,95,89,75,87,81,99,76,104,84,93,86,97,77,72,87,81,87,88,84,91,95]},{"d":"2026-08-09","n":290,"a":2079229,"b":2079518,"c":[70,83,75,73,72,68,81,86,56,77,53,70,82,56,89,55,63,70,68,76,75,75,70,67,72,59,74,61,70,66,75,69,69,77,75,76,72,74,68,78,73,63,70,76,84,81,67,64,71,79,71,71,75,71,89,70,73,59,85,78,62,76,85,62,73,66,68,86,81,61,91,77,73,73,76,70,69,73,84,79]}];
+const RECENT=[{"k":2079518,"v":[5,15,18,27,39,40,44,45,52,53,54,56,57,61,63,67,69,70,73,77]},{"k":2079517,"v":[1,5,13,22,24,25,35,36,38,40,45,46,53,56,63,64,73,74,76,77]},{"k":2079516,"v":[1,5,13,15,26,27,29,42,49,53,54,61,64,65,66,67,68,71,75,78]},{"k":2079515,"v":[6,9,13,23,25,30,33,34,36,38,41,48,50,53,55,60,66,68,72,76]},{"k":2079514,"v":[1,7,10,13,15,17,18,20,24,29,36,37,40,44,45,47,52,58,73,75]}];
+const TICKER=[{"k":2079518,"v":[5,15,18,27,39,40,44,45,52,53,54,56,57,61,63,67,69,70,73,77]},{"k":2079517,"v":[1,5,13,22,24,25,35,36,38,40,45,46,53,56,63,64,73,74,76,77]},{"k":2079516,"v":[1,5,13,15,26,27,29,42,49,53,54,61,64,65,66,67,68,71,75,78]},{"k":2079515,"v":[6,9,13,23,25,30,33,34,36,38,41,48,50,53,55,60,66,68,72,76]},{"k":2079514,"v":[1,7,10,13,15,17,18,20,24,29,36,37,40,44,45,47,52,58,73,75]},{"k":2079513,"v":[2,3,6,13,18,21,22,23,29,30,33,35,38,41,51,56,65,69,75,76]},{"k":2079512,"v":[1,15,16,17,22,23,31,32,36,40,44,46,49,51,58,59,60,64,71,76]},{"k":2079511,"v":[6,9,10,11,12,13,21,29,32,33,40,41,45,46,50,59,62,69,70,76]},{"k":2079510,"v":[2,3,9,12,16,23,26,34,35,37,45,49,51,56,61,62,65,68,75,79]},{"k":2079509,"v":[1,14,18,22,25,26,30,38,41,49,50,53,55,56,57,60,61,66,72,78]},{"k":2079508,"v":[10,13,17,19,21,24,28,33,37,41,46,52,56,57,58,63,66,68,69,70]},{"k":2079507,"v":[3,8,23,27,30,31,32,36,37,47,48,55,57,60,62,67,71,78,79,80]},{"k":2079506,"v":[2,5,16,17,19,20,23,24,31,38,40,41,44,45,48,49,51,54,58,60]},{"k":2079505,"v":[6,11,15,16,20,23,33,38,40,48,50,52,53,55,59,60,62,64,68,74]}];
+const HI=["#9ec5f4","#6da7ec","#3987e5","#2a78d6","#1c5cab"];
+const LO=["#f6c9c9","#eda3a3","#e07b7b","#d05454","#bd3535"];
+const RAMP=["#cde2fb","#b7d3f6","#9ec5f4","#86b6ef","#6da7ec","#5598e7","#3987e5","#2a78d6","#256abf","#1c5cab","#184f95","#104281"];
+const $=id=>document.getElementById(id);
+
+document.getElementById('tape').innerHTML=[0,1].map(()=>TICKER.map(r=>
+  '<span class="tk"><b>#'+r.k+'</b>'+r.v.map(v=>'<i>'+v+'</i>').join('')+'</span>').join('')).join('');
+
+const fromSel=$('from'), toSel=$('to');
+DAY.forEach((d,i)=>{
+  fromSel.insertAdjacentHTML('beforeend','<option value="'+i+'">'+d.d+'</option>');
+  toSel.insertAdjacentHTML('beforeend','<option value="'+i+'">'+d.d+'</option>');
+});
+fromSel.value=0; toSel.value=DAY.length-1;
+
+function stats(i0,i1){
+  const sel=DAY.slice(i0,i1+1);
+  const cnt=new Array(80).fill(0); let nd=0;
+  sel.forEach(d=>{ nd+=d.n; for(let i=0;i<80;i++) cnt[i]+=d.c[i]; });
+  const tot=nd*20, exp=tot/80, sd=Math.sqrt(nd*0.25*0.75)||1;
+  const z=cnt.map(v=>(v-exp)/sd);
+  const chi=cnt.reduce((s,v)=>s+(v-exp)*(v-exp)/(exp||1),0);
+  return {cnt,z,nd,tot,exp,sd,chi,sel,
+    lo:Math.min(...cnt),hi:Math.max(...cnt),
+    n2:z.filter(v=>Math.abs(v)>2).length, n3:z.filter(v=>Math.abs(v)>3).length};
+}
+
+function render(){
+  const i0=+fromSel.value, i1=+toSel.value;
+  if(i0>i1){ toSel.value=i0; return render(); }
+  const S=stats(i0,i1);
+  const a=S.sel[0], b=S.sel[S.sel.length-1];
+
+  $('sub').textContent=S.nd.toLocaleString()+' draws · #'+a.a+'–#'+b.b+' · '
+    +S.tot.toLocaleString()+' numbers · expected '+S.exp.toFixed(0)+' each · σ '+S.sd.toFixed(1);
+  $('rng').textContent=S.sel.length+(S.sel.length===1?' day':' days');
+
+  const flag=S.chi>100.7;
+  $('quotes').innerHTML=[
+    ['Draws',S.nd.toLocaleString(),S.sel.length+' day(s)'],
+    ['Chi-square',S.chi.toFixed(1),'random ≈ 59 ± 9'],
+    ['Range',S.lo+'–'+S.hi,'spread '+(S.hi-S.lo)],
+    ['Beyond ±2σ',S.n2,'expect ~3.6'],
+    ['Beyond ±3σ',S.n3,'expect ~0.2']
+  ].map(([k,v,d])=>'<div class="q"><p class="k">'+k+'</p><p class="v">'+v+'</p><p class="d">'+d+'</p></div>').join('');
+
+  // recent draws — highlight numbers above expectation in THIS range
+  $('recent').innerHTML=RECENT.map(r=>'<div class="rw"><span class="id">#'+r.k+'</span>'
+    +r.v.map(v=>'<span class="ball'+(S.z[v-1]>0.5?' hot':'')+'">'+v+'</span>').join('')+'</div>').join('');
+
+  // deviation chart
+  const W=940,H=420,ML=52,MT=44,MR=16,MB=58,pw=W-ML-MR,ph=H-MT-MB;
+  const zmax=Math.max(3.4,Math.max(...S.z.map(Math.abs))*1.1);
+  const X=i=>ML+(i+0.5)*(pw/80), Y=v=>MT+ph/2-(v/zmax)*(ph/2), bw=pw/80*0.72;
+  let s='';
+  for(const t of [-3,-2,-1,0,1,2,3]) s+='<line x1="'+ML+'" x2="'+(W-MR)+'" y1="'+Y(t).toFixed(1)
+    +'" y2="'+Y(t).toFixed(1)+'" class="'+(t===0?'zero':'gl')+'"/><text x="'+(ML-8)+'" y="'+(Y(t)+4).toFixed(1)
+    +'" class="ax" text-anchor="end">'+(t===0?'exp':(t>0?'+':'')+t)+'</text>';
+  S.z.forEach((v,i)=>{ const col=(v>=0?HI:LO)[Math.min(Math.floor(Math.abs(v)/zmax*5),4)];
+    s+='<rect class="bar2" x="'+(X(i)-bw/2).toFixed(1)+'" y="'+Math.min(Y(0),Y(v)).toFixed(1)
+      +'" width="'+bw.toFixed(1)+'" height="'+Math.max(Math.abs(Y(v)-Y(0)),1).toFixed(1)
+      +'" rx="1.8" fill="'+col+'" data-n="'+(i+1)+'" data-c="'+S.cnt[i]+'" data-z="'+v.toFixed(2)+'"/>'; });
+  [1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80].forEach(n=>
+    s+='<text x="'+X(n-1).toFixed(1)+'" y="'+(MT+ph+16)+'" class="ax" text-anchor="middle">'+n+'</text>');
+  s+='<text x="'+ML+'" y="26" class="hd">deviation from expected (σ)</text>';
+  $('c1').innerHTML=s;
+
+  // board
+  const CW=98,CH=50,G=5,BL=14,BT=34; let t2='<text x="14" y="22" class="hd">the board — darker = drawn more</text>';
+  S.cnt.forEach((v,i)=>{ const r=Math.floor(i/8),q=i%8,f=(v-S.lo)/((S.hi-S.lo)||1);
+    const col=RAMP[Math.min(Math.floor(f*12),11)], ink=f>0.5?'#fff':'#0b0b0b';
+    t2+='<g class="cellg" data-n="'+(i+1)+'" data-c="'+v+'" data-z="'+S.z[i].toFixed(2)+'">'
+      +'<rect x="'+(BL+q*(CW+G))+'" y="'+(BT+r*(CH+G))+'" width="'+CW+'" height="'+CH+'" rx="6" fill="'+col+'"/>'
+      +'<text x="'+(BL+q*(CW+G)+9)+'" y="'+(BT+r*(CH+G)+21)+'" class="bn2" fill="'+ink+'">'+(i+1)+'</text>'
+      +'<text x="'+(BL+q*(CW+G)+CW-9)+'" y="'+(BT+r*(CH+G)+38)+'" class="bv" fill="'+ink+'" text-anchor="end">'+v+'</text></g>'; });
+  $('c3').innerHTML=t2;
+
+  // table — vs exp and σ both recomputed
+  const ord=S.cnt.map((v,i)=>i).sort((x,y)=>S.cnt[y]-S.cnt[x]);
+  $('tbody').innerHTML=ord.map((i,r)=>{
+    const dv=S.cnt[i]-S.exp, cls=dv>=0?'up':'dn';
+    return '<tr><td>'+(r+1)+'</td><td><b>'+(i+1)+'</b></td><td>'+S.cnt[i]+'</td>'
+      +'<td class="'+cls+'">'+(dv>=0?'▲':'▼')+' '+Math.abs(dv).toFixed(0)+'</td>'
+      +'<td class="'+cls+'">'+(S.z[i]>=0?'+':'')+S.z[i].toFixed(2)+'</td></tr>'; }).join('');
+
+  $('note').innerHTML='Chi-square for this range is <b>'+S.chi.toFixed(1)+'</b>. '
+    +'The right yardstick is <b>not</b> the textbook df=79: because each draw takes 20 of 80 <i>without '
+    +'replacement</i>, every count has variance 0.75×E rather than E, so genuinely random Keno averages '
+    +'<b>59.3</b> (simulated: mean 60.1, sd 9.4, 5th–95th percentile 46–76). '
+    +(S.chi>85?'This range sits <b>above</b> that band — worth a second look.'
+             :'This range sits inside that band — indistinguishable from chance.')
+    +' '+S.n2+' numbers beyond ±2σ (expect ~3.6), '+S.n3+' beyond ±3σ. '
+    +'Smaller ranges have smaller σ, so single days look noisier — sample size, not signal. '
+    +'Draws are independent: frequency carries no information about the next draw.';
+
+  document.querySelectorAll('.bar2,.cellg').forEach(el=>{
+    el.addEventListener('mousemove',e=>{ const t=$('tt');
+      t.textContent='#'+el.dataset.n+'  '+el.dataset.c+' draws  '+el.dataset.z+'σ';
+      t.style.opacity=1; let x=e.clientX+12;
+      if(x+t.offsetWidth>innerWidth-8) x=e.clientX-t.offsetWidth-12;
+      t.style.left=x+'px'; t.style.top=(e.clientY-30)+'px'; });
+    el.addEventListener('mouseleave',()=>{ $('tt').style.opacity=0; });
+  });
+}
+
+document.querySelectorAll('.chip').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed','false'));
+  btn.setAttribute('aria-pressed','true');
+  const p=+btn.dataset.p;
+  fromSel.value = p===0 ? 0 : Math.max(0,DAY.length-p);
+  toSel.value=DAY.length-1;
+  render();
+}));
+[fromSel,toSel].forEach(s=>s.addEventListener('change',()=>{
+  document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed','false'));
+  render();
+}));
+render();
+</script>
+</body>
+</html>
