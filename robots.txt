@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mariayinusa41-cell.github.io/keno-tracker/sitemap.xml
